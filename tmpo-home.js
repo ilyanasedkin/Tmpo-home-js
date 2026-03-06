@@ -1,5 +1,4 @@
-<!-- ===== CONTENT VISIBILITY: DEFER BELOW-FOLD SECTIONS ===== -->
-<script>
+// ===== CONTENT VISIBILITY: DEFER BELOW-FOLD SECTIONS =====
 document.addEventListener('DOMContentLoaded', () => {
   const deferredSections = [
     '.home-benefits',
@@ -25,60 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-</script>
 
-<!-- ===== STYLES ===== -->
-<style>
-  html, body { overflow-x: hidden; }
-  body {
-    background-color: #ffffff;
-    transition: background-color 0.6s ease;
-  }
-  body.theme-dark { background-color: #0D0E10; }
-  .heading-style-h2 { transition: color 0.4s ease; }
-  body.theme-dark .heading-style-h2 { color: #ffffff; }
-  .navbar_component .navbar_link {
-    color: rgb(10, 29, 36);
-    transition: color .25s ease;
-  }
-  .navbar_component .navbar_link:hover { color: rgb(10, 29, 36); }
-  .navbar_component.navbar--on-dark .navbar_link { color: #fff; }
-  .navbar_component.navbar--on-dark .navbar_link:hover { color: #0D0E10; }
-  .navbar_component .navbar_link svg {
-    fill: currentColor;
-    stroke: currentColor;
-    transition: fill .25s ease, stroke .25s ease;
-  }
-  .wf-hidden-soft {
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    position: static !important;
-    transform: none !important;
-    max-height: 0 !important;
-    overflow: clip !important;
-  }
-  [data-animate="stagger-delayed"] { visibility: hidden; }
-  [data-animate="fade-up"] { opacity: 0; transform: translate3d(0,30px,0); }
-  .benefit_wrapper {
-    perspective: 1100px;
-    transform-style: preserve-3d;
-    overflow: visible;
-  }
-  .benefit_track, .benefits_list { transform-style: preserve-3d; }
-  .benefits_card {
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    will-change: transform, opacity;
-  }
-  .home-benefits { position: relative; z-index: 10; }
-  .home-faq, .home-after-benefits { position: relative; z-index: 1; }
-</style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-
-<!-- ===== PRELOADER ===== -->
-<script>
+// ===== PRELOADER =====
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     const preloader = document.querySelector('.pre-loader-wrapper');
@@ -89,10 +36,8 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { preloader.style.display = 'none'; }, 800);
   }, 2500);
 });
-</script>
 
-<!-- ===== NAVBAR ===== -->
-<script>
+// ===== NAVBAR =====
 document.addEventListener('DOMContentLoaded', function () {
   const navbar = document.querySelector('.navbar_component');
   const darkSections = document.querySelectorAll('.dark-section');
@@ -112,10 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', updateNavbarTheme);
   updateNavbarTheme();
 });
-</script>
 
-<!-- ===== ROLE SWITCHER ===== -->
-<script>
+// ===== ROLE SWITCHER =====
 (function () {
   let roleInited = false;
   function initRoleSwitcher() {
@@ -165,10 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-animate="fade-up"]').forEach(el => {
           if (window.animateFadeUp) window.animateFadeUp(el);
         });
-        // Applicant: already inited, scroll directly next frame.
-        // Employer: init benefits (if available), then scroll after layout settles.
-        // Scroll is decoupled from initBenefitsSection callback — employer section
-        // may not be inited yet, so we give the DOM 120ms to show/reflow before scrolling.
         if (role === 'applicant') {
           requestAnimationFrame(scrollToCards);
         } else {
@@ -195,24 +134,12 @@ document.addEventListener('DOMContentLoaded', function () {
   window.Webflow = window.Webflow || [];
   window.Webflow.push(initRoleSwitcher);
 })();
-</script>
 
-<!-- ===== DEFERRED SECTIONS (IntersectionObserver sequential load) ===== -->
-<script>
+// ===== DEFERRED SECTIONS =====
 window.addEventListener('DOMContentLoaded', () => {
-
-  // Boot order:
-  // - Immediate: dark mode + GSAP (needed above the fold)
-  // - Deferred:  everything else loads as user scrolls near it
-  // - Role-gated sections (data-role) are controlled by the role switcher above —
-  //   we only wire animations here, not show/hide logic.
-
   const sections = [
-    // Immediate — above fold
     { fn: initDarkMode,         immediate: true },
     { fn: initGSAP,             immediate: true },
-
-    // Deferred — below fold
     { selector: '.home-applicants_wrapper', fn: initApplicantsCircle, rootMargin: '300px 0px' },
     { selector: '.tornado_stage',           fn: initTornado,          rootMargin: '300px 0px' },
     { selector: '.home-benefits',           fn: initBenefitsBoot,     rootMargin: '400px 0px' },
@@ -220,7 +147,6 @@ window.addEventListener('DOMContentLoaded', () => {
     { selector: '.home-team',               fn: initTeam,             rootMargin: '300px 0px' },
     { selector: 'footer',                   fn: initFooter,           rootMargin: '200px 0px' },
   ];
-
   sections.forEach(({ selector, fn, immediate, rootMargin }) => {
     if (immediate) { fn(); return; }
     const el = document.querySelector(selector);
@@ -232,10 +158,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }, { rootMargin: rootMargin || '300px 0px' });
     obs.observe(el);
   });
-
 });
 
-// ─── DARK MODE ────────────────────────────────────────────────────────
+// ===== DARK MODE =====
 function initDarkMode() {
   const darkSections = document.querySelectorAll('.dark-section');
   const stopMarker   = document.getElementById('section-faq');
@@ -257,7 +182,7 @@ function initDarkMode() {
   updateTheme();
 }
 
-// ─── GSAP + ANIMATIONS ────────────────────────────────────────────────
+// ===== GSAP + ANIMATIONS =====
 function initGSAP() {
   (function loadGSAP(cb) {
     if (window.gsap && window.ScrollTrigger) { cb(); return; }
@@ -276,14 +201,12 @@ function initGSAP() {
       window.SplitText
         ? gsap.registerPlugin(ScrollTrigger, SplitText)
         : gsap.registerPlugin(ScrollTrigger);
-
       const isHidden   = el => !!(el.closest('[style*="display: none"]') || el.closest('[style*="display:none"]'));
       const inViewport = el => { let t = 0, n = el; while (n) { t += n.offsetTop || 0; n = n.offsetParent; } return t < (window.scrollY + window.innerHeight); };
       const scheduleRefresh = (() => {
         let s = false;
         return () => { if (s) return; s = true; requestAnimationFrame(() => requestAnimationFrame(() => { ScrollTrigger.refresh(); s = false; })); };
       })();
-
       function animateStagger(el) {
         if (el.dataset.split === 'true' || isHidden(el) || !window.SplitText) return;
         el.dataset.split = 'true';
@@ -295,7 +218,6 @@ function initGSAP() {
           ? run()
           : ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: run, invalidateOnRefresh: true });
       }
-
       function animateFadeUp(el) {
         if (el.dataset.fadeup === 'true' || isHidden(el)) return;
         el.dataset.fadeup = 'true';
@@ -305,8 +227,6 @@ function initGSAP() {
         }, { threshold: 0.1 });
         io.observe(el);
       }
-
-      // Above-fold stagger (fires immediately with delay)
       document.querySelectorAll('[data-animate="stagger-delayed"]').forEach(el => {
         if (!window.SplitText || el.dataset.split === 'true' || isHidden(el)) return;
         el.dataset.split = 'true';
@@ -315,23 +235,18 @@ function initGSAP() {
         gsap.set(el, { visibility: 'visible' });
         gsap.from(targets, { delay: 0.8, y: 60, autoAlpha: 0, duration: 0.6, stagger: 0.02, ease: 'power3.out', overwrite: true });
       });
-
       document.querySelectorAll('[data-animate="stagger"]').forEach(el => animateStagger(el));
       document.querySelectorAll('[data-animate="fade-up"]').forEach(el => animateFadeUp(el));
-
-      // Expose for role switcher re-init
       window.animateStagger = animateStagger;
       window.animateFadeUp  = animateFadeUp;
-
       scheduleRefresh();
       if (document.fonts?.ready) document.fonts.ready.then(scheduleRefresh);
     });
   });
 }
 
-// ─── APPLICANTS CIRCLE ────────────────────────────────────────────────
+// ===== APPLICANTS CIRCLE =====
 function initApplicantsCircle() {
-  // Expose globally — role switcher calls this on role change
   window.initApplicantsCircle = function () {
     var wrapper = document.querySelector('.home-applicants_wrapper');
     if (!wrapper) return;
@@ -372,7 +287,7 @@ function initApplicantsCircle() {
   window.initApplicantsCircle();
 }
 
-// ─── TORNADO ──────────────────────────────────────────────────────────
+// ===== TORNADO =====
 function initTornado() {
   const stage = document.querySelector('.tornado_stage');
   const list  = document.querySelector('.tornado_list');
@@ -449,30 +364,23 @@ function initTornado() {
   new ResizeObserver(()=>{ measureBaseItemWidth(); computeResponsive(); layout(a); }).observe(stage);
 }
 
-// ─── BENEFITS BOOT ────────────────────────────────────────────────────
-// Boots the applicant view by default.
-// Role switcher handles employer via initBenefitsSection(role, onReady).
+// ===== BENEFITS BOOT =====
 function initBenefitsBoot() {
   setTimeout(() => {
     if (window.initBenefitsSection) window.initBenefitsSection('applicant');
   }, 100);
 }
 
-// ─── FAQ ──────────────────────────────────────────────────────────────
-// Add custom FAQ accordion logic here if needed beyond Webflow native IX2
+// ===== FAQ =====
 function initFAQ() {}
 
-// ─── TEAM ─────────────────────────────────────────────────────────────
-// Add team modal / slider init here
+// ===== TEAM =====
 function initTeam() {}
 
-// ─── FOOTER ───────────────────────────────────────────────────────────
-// Add footer-specific logic here
+// ===== FOOTER =====
 function initFooter() {}
-</script>
 
-<!-- ===== MODAL (waitlist) ===== -->
-<script>
+// ===== MODAL (waitlist) =====
 $(document).ready(function() {
   const openBtn      = '.is-waitlist';
   const closeBtn     = '.waitlist-close-button';
@@ -490,4 +398,3 @@ $(document).ready(function() {
   $(closeBtn).click(function() { restoreScroll(); });
   $(document).keydown(function(e) { if (e.keyCode === 27) { restoreScroll(); $(closeBtn).click(); } });
 });
-</script>
